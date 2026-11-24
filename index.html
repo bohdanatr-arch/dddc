@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Friday Robux Gift</title>
+    <!-- Підключення Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Підключення шрифтів: Oswald (для високих заголовків) та Inter (для основного тексту) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'display': ['Oswald', 'sans-serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-orange': 'var(--accent-color, #FF8A00)',
+                        'brand-orange-hover': 'var(--accent-color, #FF9E2C)',
+                        'brand-dark': '#0A0D0B',
+                    },
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2.5s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 25px var(--accent-glow, rgba(255, 138, 0, 0.5))' },
+                            '50%': { boxShadow: '0 0 45px var(--accent-glow-strong, rgba(255, 138, 0, 0.85))' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --accent-color: #FF8A00;
+            --accent-text: #000000;
+            --accent-glow: rgba(255, 138, 0, 0.5);
+            --accent-glow-strong: rgba(255, 138, 0, 0.85);
+            --bg-center: rgba(32, 48, 36, 0.45);
+            --bg-accent: rgba(255, 138, 0, 0.08);
+        }
+
+        /* Кастомні стилі для фонового градієнта та полотна конфетті */
+        body {
+            background-color: #070908;
+            background-image: 
+                radial-gradient(circle at 50% 35%, var(--bg-center) 0%, rgba(10, 13, 11, 0.95) 65%),
+                radial-gradient(circle at 80% 80%, var(--bg-accent) 0%, transparent 50%);
+            min-height: 100dvh;
+            overflow-x: hidden;
+            transition: background-image 0.4s ease;
+        }
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="text-white font-sans antialiased flex flex-col items-center justify-center min-h-[100dvh] relative selection:bg-brand-orange selection:text-black">
+
+    <!-- Canvas для анімації конфетті при натисканні на кнопку -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Головний контейнер (оптимізований під висоту екрана, щоб кнопка завжди була в полі зору) -->
+    <main class="w-full max-w-md mx-auto px-5 py-5 sm:py-8 flex flex-col items-center justify-between min-h-[100dvh] z-10 text-center">
+        
+        <!-- Верхній блок: Заголовок (5 кліків по "ROBUX" відкривають секретне меню кольорів) -->
+        <header class="w-full">
+            <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight uppercase leading-none text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
+                BLACK FRIDAY
+            </h1>
+            <p id="secret-trigger" title="" class="font-sans text-xl sm:text-3xl font-extrabold tracking-wide uppercase text-brand-orange mt-1 drop-shadow-[0_2px_10px_var(--accent-glow)] select-none cursor-default">
+                ROBUX
+            </p>
+        </header>
+
+        <!-- Центральна ілюстрація: Купа металевих 3D-монет Robux -->
+        <div class="relative w-full max-w-[270px] sm:max-w-[340px] my-1 flex items-center justify-center animate-float">
+            <!-- Фонове світіння під монетами -->
+            <div id="coin-glow" class="absolute inset-0 rounded-full blur-2xl scale-90 transition-colors duration-300" style="background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);"></div>
+            
+            <!-- Деталізована векторна композиція 3D монет -->
+            <svg viewBox="0 0 420 290" class="w-full h-auto drop-shadow-[0_22px_25px_rgba(0,0,0,0.9)]" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Металеві градієнти срібла/хрому -->
+                    <linearGradient id="metalLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="30%" stop-color="#D4D8DD"/>
+                        <stop offset="65%" stop-color="#7A828C"/>
+                        <stop offset="100%" stop-color="#373C42"/>
+                    </linearGradient>
+                    <linearGradient id="metalDark" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#616870"/>
+                        <stop offset="50%" stop-color="#2B3036"/>
+                        <stop offset="100%" stop-color="#14171A"/>
+                    </linearGradient>
+                    <linearGradient id="metalRim" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#22262A"/>
+                        <stop offset="25%" stop-color="#B8C0C8"/>
+                        <stop offset="50%" stop-color="#484E54"/>
+                        <stop offset="80%" stop-color="#E5E9EC"/>
+                        <stop id="rim-accent-stop" offset="100%" stop-color="#FF7B00"/>
+                    </linearGradient>
+                    <!-- Помаранчевий відблиск (rim light як на референсі) -->
+                    <linearGradient id="orangeReflection" x1="20%" y1="0%" x2="100%" y2="80%">
+                        <stop offset="50%" stop-color="#8C949E" stop-opacity="0"/>
+                        <stop id="refl-accent-stop-1" offset="85%" stop-color="#FF7A00" stop-opacity="0.65"/>
+                        <stop id="refl-accent-stop-2" offset="100%" stop-color="#FFB84D" stop-opacity="0.95"/>
+                    </linearGradient>
+                    <!-- Внутрішній градієнт шестикутника -->
+                    <linearGradient id="innerFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#4A5058"/>
+                        <stop offset="50%" stop-color="#25292E"/>
+                        <stop offset="100%" stop-color="#121417"/>
+                    </linearGradient>
+
+                    <!-- Шаблон горизонтальної монети в стопці -->
+                    <g id="flat-coin">
+                        <!-- Бічна грань (товщина) -->
+                        <path d="M -52,0 L -52,18 C -52,32 52,32 52,18 L 52,0 Z" fill="url(#metalRim)"/>
+                        <path d="M -52,0 L -52,18 C -52,32 52,32 52,18 L 52,0 Z" fill="url(#orangeReflection)"/>
+                        <!-- Верхня площина -->
+                        <ellipse cx="0" cy="0" rx="52" ry="22" fill="url(#metalLight)" stroke="#FFFFFF" stroke-width="0.8" stroke-opacity="0.5"/>
+                        <ellipse cx="0" cy="0" rx="43" ry="17" fill="url(#innerFace)" stroke="#181B1E" stroke-width="1.5"/>
+                        <!-- Внутрішній шестикутник Robux -->
+                        <polygon points="0,-12 24,-6 24,6 0,12 -24,6 -24,-6" fill="none" stroke="url(#metalLight)" stroke-width="4.5" stroke-linejoin="round"/>
+                        <!-- Центральний квадрат -->
+                        <rect x="-7" y="-3.5" width="14" height="7" rx="1" fill="url(#metalLight)"/>
+                    </g>
+                </defs>
+
+                <!-- Тінь під усією купою монет -->
+                <ellipse cx="210" cy="245" rx="175" ry="28" fill="#000000" opacity="0.85"/>
+
+                <!-- Ліва окрема монета -->
+                <use href="#flat-coin" transform="translate(82, 205) scale(0.95)"/>
+
+                <!-- Задня ліва стопка (3 монети) -->
+                <use href="#flat-coin" transform="translate(135, 195)"/>
+                <use href="#flat-coin" transform="translate(133, 174)"/>
+                <use href="#flat-coin" transform="translate(136, 153)"/>
+
+                <!-- Задня центральна висока стопка (4 монети) -->
+                <use href="#flat-coin" transform="translate(215, 165) scale(1.05)"/>
+                <use href="#flat-coin" transform="translate(212, 142) scale(1.05)"/>
+                <use href="#flat-coin" transform="translate(216, 119) scale(1.05)"/>
+                <use href="#flat-coin" transform="translate(213, 96) scale(1.05)"/>
+
+                <!-- Права стопка (3 монети) -->
+                <use href="#flat-coin" transform="translate(298, 195) scale(1.02)"/>
+                <use href="#flat-coin" transform="translate(295, 173) scale(1.02)"/>
+                <use href="#flat-coin" transform="translate(299, 151) scale(1.02)"/>
+
+                <!-- Права крайня монета -->
+                <use href="#flat-coin" transform="translate(335, 212) scale(0.92)"/>
+
+                <!-- ГОЛОВНА ПЕРЕДНЯ 3D МОНЕТА ROBUX (нахилена) -->
+                <g transform="translate(208, 185) rotate(-14)">
+                    <!-- Об'ємний 3D край монети -->
+                    <circle cx="6" cy="8" r="68" fill="#14171A"/>
+                    <circle cx="4" cy="5" r="68" fill="url(#metalRim)"/>
+                    <circle cx="4" cy="5" r="68" fill="url(#orangeReflection)"/>
+                    
+                    <!-- Основний диск монети -->
+                    <circle cx="0" cy="0" r="68" fill="url(#metalLight)" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.7"/>
+                    <!-- Внутрішнє заглиблення -->
+                    <circle cx="0" cy="0" r="56" fill="url(#innerFace)" stroke="#111315" stroke-width="2"/>
+                    
+                    <!-- Товстий металевий шестикутник символу Robux -->
+                    <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" 
+                             fill="none" stroke="#111315" stroke-width="15" stroke-linejoin="round" transform="translate(2, 3)"/>
+                    <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" 
+                             fill="none" stroke="url(#metalLight)" stroke-width="13" stroke-linejoin="round"/>
+                    <!-- Помаранчевий відблиск на грані шестикутника -->
+                    <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" 
+                             fill="none" stroke="url(#orangeReflection)" stroke-width="13" stroke-linejoin="round"/>
+
+                    <!-- Центральний фірмовий квадрат -->
+                    <rect x="-11" y="-11" width="22" height="22" rx="2.5" fill="#111315" transform="translate(2, 2)"/>
+                    <rect x="-11" y="-11" width="22" height="22" rx="2.5" fill="url(#metalLight)"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Текстовий блок та переваги -->
+        <section class="w-full flex flex-col items-center">
+            <h2 class="font-sans text-2xl sm:text-4xl font-extrabold uppercase tracking-tight leading-[1.1] text-white">
+                YOUR BLACK<br>FRIDAY ROBUXES
+            </h2>
+
+            <p class="text-gray-200 text-sm sm:text-lg font-medium leading-snug mt-2 max-w-[260px]">
+                Hurry up to claim your Black Friday robuxes!
+            </p>
+
+            <!-- Список переваг із помаранчевими галочками -->
+            <ul class="mt-3 sm:mt-4 space-y-1.5 sm:space-y-2.5 text-left inline-block">
+                <li class="flex items-center space-x-2.5">
+                    <svg class="w-5 h-5 text-brand-orange flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-white font-semibold text-sm sm:text-base">Your robuxes are waiting for you!</span>
+                </li>
+                <li class="flex items-center space-x-2.5">
+                    <svg class="w-5 h-5 text-brand-orange flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-white font-semibold text-sm sm:text-base">Available for all participants!</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Кнопка дії (CTA) та дисклеймер -->
+        <footer class="w-full mt-4 mb-1 flex flex-col items-center relative z-20">
+            <button id="claim-btn" type="button"
+                style="background-color: var(--accent-color); color: var(--accent-text);"
+                class="w-full max-w-[330px] py-3.5 sm:py-4 px-8 rounded-full font-extrabold text-xl sm:text-2xl uppercase tracking-wide transition-all duration-150 hover:scale-105 active:scale-95 animate-pulse-glow cursor-pointer shadow-lg">
+                CLAIM ROBUXES
+            </button>
+
+            <p class="font-display text-gray-400/90 text-xs sm:text-base uppercase tracking-wider mt-4">
+                FOR ILLUSTRATION PURPOSES ONLY
+            </p>
+        </footer>
+    </main>
+
+    <!-- Секретна панель зміни кольорів інтерфейсу -->
+    <div id="secret-theme-panel" class="hidden fixed bottom-4 right-4 left-4 sm:left-auto sm:w-80 bg-zinc-900/95 backdrop-blur-md border border-white/15 rounded-2xl p-4 shadow-2xl z-50 text-left">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full animate-ping" style="background-color: var(--accent-color);"></span>
+                Secret Theme Studio
+            </span>
+            <button id="close-secret-panel" type="button" class="text-gray-400 hover:text-white p-1 rounded-lg text-sm font-bold">✕</button>
+        </div>
+
+        <!-- Готові пресети -->
+        <div class="grid grid-cols-5 gap-2 mb-3">
+            <button type="button" data-theme="orange" class="theme-preset h-9 rounded-xl border-2 border-white/40 transition-transform hover:scale-105" style="background: linear-gradient(135deg, #FF8A00, #FFB84D);" title="Black Friday Orange"></button>
+            <button type="button" data-theme="emerald" class="theme-preset h-9 rounded-xl border border-white/20 transition-transform hover:scale-105" style="background: linear-gradient(135deg, #10B981, #6EE7B7);" title="Robux Emerald"></button>
+            <button type="button" data-theme="cyber" class="theme-preset h-9 rounded-xl border border-white/20 transition-transform hover:scale-105" style="background: linear-gradient(135deg, #00E5FF, #2979FF);" title="Cyber Blue"></button>
+            <button type="button" data-theme="neon" class="theme-preset h-9 rounded-xl border border-white/20 transition-transform hover:scale-105" style="background: linear-gradient(135deg, #D946EF, #EC4899);" title="Neon Purple"></button>
+            <button type="button" data-theme="gold" class="theme-preset h-9 rounded-xl border border-white/20 transition-transform hover:scale-105" style="background: linear-gradient(135deg, #FACC15, #FEF08A);" title="VIP Gold"></button>
+        </div>
+
+        <!-- Довільний вибір кольору -->
+        <div class="flex items-center justify-between gap-3 pt-2 border-t border-white/10">
+            <label for="custom-color-picker" class="text-xs text-gray-300 font-medium">Свій колір акценту:</label>
+            <div class="flex items-center gap-2">
+                <input id="custom-color-picker" type="color" value="#FF8A00" class="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0">
+                <button id="reset-theme-btn" type="button" class="text-xs px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-200 font-semibold">Скинути</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Система частинок конфетті (запускається при натисканні на кнопку)
+         */
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let confettiColors = ['#FF8A00', '#FFD700', '#FF3B30', '#34C759', '#007AFF', '#AF52DE', '#FFFFFF'];
+
+        class ConfettiParticle {
+            constructor(originX, originY) {
+                this.x = originX + (Math.random() - 0.5) * 140;
+                this.y = originY;
+                this.size = Math.random() * 9 + 5;
+                this.color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                // Виліт вгору та в сторони з подальшим плавним падінням
+                const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.4;
+                const velocity = Math.random() * 14 + 8;
+                this.speedX = Math.cos(angle) * velocity;
+                this.speedY = Math.sin(angle) * velocity;
+                this.gravity = 0.28;
+                this.drag = 0.985;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 10;
+                this.shape = Math.random() > 0.4 ? 'rect' : 'circle';
+                this.opacity = 1;
+            }
+
+            update() {
+                this.speedX *= this.drag;
+                this.speedY = this.speedY * this.drag + this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > canvas.height * 0.85) {
+                    this.opacity -= 0.025;
+                }
+            }
+
+            draw() {
+                if (this.opacity <= 0) return;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(0, this.opacity);
+
+                if (this.shape === 'rect') {
+                    ctx.fillRect(-this.size / 2, -this.size / 4, this.size, this.size / 2);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size / 2.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        function launchConfetti(originX, originY, count = 110) {
+            for (let i = 0; i < count; i++) {
+                particles.push(new ConfettiParticle(originX, originY));
+            }
+            if (!animationId) {
+                animateConfetti();
+            }
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => p.opacity > 0 && p.y < canvas.height + 40);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            if (particles.length > 0) {
+                animationId = requestAnimationFrame(animateConfetti);
+            } else {
+                animationId = null;
+            }
+        }
+
+        /**
+         * Обробка натискання на кнопку CLAIM ROBUXES
+         */
+        const claimBtn = document.getElementById('claim-btn');
+        let isClaimed = false;
+
+        claimBtn.addEventListener('click', () => {
+            const rect = claimBtn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // Салют конфетті прямо з кнопки
+            launchConfetti(centerX, centerY, 120);
+
+            // Візуальний відгук на самій кнопці
+            isClaimed = true;
+            claimBtn.textContent = 'ROBUXES CLAIMED!';
+        });
+
+        /**
+         * Секретна функція зміни кольорів інтерфейсу
+         * Активація: 5 швидких кліків по слову "ROBUX" або клавіша "C"
+         */
+        const secretTrigger = document.getElementById('secret-trigger');
+        const secretPanel = document.getElementById('secret-theme-panel');
+        const closeSecretPanel = document.getElementById('close-secret-panel');
+        const customColorPicker = document.getElementById('custom-color-picker');
+        const resetThemeBtn = document.getElementById('reset-theme-btn');
+        let secretClickCount = 0;
+        let secretClickTimer = null;
+
+        secretTrigger.addEventListener('click', () => {
+            secretClickCount++;
+            clearTimeout(secretClickTimer);
+            secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 1500);
+
+            if (secretClickCount >= 5) {
+                secretClickCount = 0;
+                secretPanel.classList.toggle('hidden');
+            }
+        });
+
+        // Також відкриття/закриття клавішею "C"
+        window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'c' && !e.ctrlKey && !e.metaKey) {
+                secretPanel.classList.toggle('hidden');
+            }
+        });
+
+        closeSecretPanel.addEventListener('click', () => {
+            secretPanel.classList.add('hidden');
+        });
+
+        function hexToRgb(hex) {
+            const clean = hex.replace('#', '');
+            const bigint = parseInt(clean, 16);
+            return {
+                r: (bigint >> 16) & 255,
+                g: (bigint >> 8) & 255,
+                b: bigint & 255
+            };
+        }
+
+        function applyCustomAccent(hex, bgCenterHex = null) {
+            const { r, g, b } = hexToRgb(hex);
+            // Автоматично підбираємо контрастний колір тексту на кнопці (чорний або білий)
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            const textColor = brightness > 145 ? '#000000' : '#FFFFFF';
+
+            const root = document.documentElement;
+            root.style.setProperty('--accent-color', hex);
+            root.style.setProperty('--accent-text', textColor);
+            root.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.5)`);
+            root.style.setProperty('--accent-glow-strong', `rgba(${r}, ${g}, ${b}, 0.85)`);
+            root.style.setProperty('--bg-accent', `rgba(${r}, ${g}, ${b}, 0.12)`);
+
+            if (bgCenterHex) {
+                const bg = hexToRgb(bgCenterHex);
+                root.style.setProperty('--bg-center', `rgba(${bg.r}, ${bg.g}, ${bg.b}, 0.45)`);
+            } else {
+                root.style.setProperty('--bg-center', `rgba(${Math.round(r * 0.2)}, ${Math.round(g * 0.2)}, ${Math.round(b * 0.2)}, 0.55)`);
+            }
+
+            // Оновлюємо металеві відблиски на 3D-монетах
+            document.getElementById('rim-accent-stop').setAttribute('stop-color', hex);
+            document.getElementById('refl-accent-stop-1').setAttribute('stop-color', hex);
+            document.getElementById('refl-accent-stop-2').setAttribute('stop-color', hex);
+
+            // Додаємо обраний колір у палітру конфетті
+            confettiColors = [hex, '#FFD700', '#FFFFFF', `rgba(${r}, ${g}, ${b}, 0.8)`, '#34C759', '#007AFF'];
+            customColorPicker.value = hex;
+        }
+
+        const presets = {
+            orange: { accent: '#FF8A00', bg: '#203024' },
+            emerald: { accent: '#10B981', bg: '#064E3B' },
+            cyber: { accent: '#00E5FF', bg: '#0C4A6E' },
+            neon: { accent: '#D946EF', bg: '#4A044E' },
+            gold: { accent: '#FACC15', bg: '#422006' }
+        };
+
+        document.querySelectorAll('.theme-preset').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = presets[btn.dataset.theme];
+                if (preset) {
+                    applyCustomAccent(preset.accent, preset.bg);
+                }
+            });
+        });
+
+        customColorPicker.addEventListener('input', (e) => {
+            applyCustomAccent(e.target.value);
+        });
+
+        resetThemeBtn.addEventListener('click', () => {
+            applyCustomAccent('#FF8A00', '#203024');
+        });
+    </script>
+</body>
+</html>
